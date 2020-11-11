@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.contrib.auth import authenticate
 import json
 
@@ -28,7 +27,7 @@ def task_2(request):
 def task_3(request):
 	d1 = {'a': 100, 'b': 200, 'c':300}
 	d2 = {'a': 300, 'b': 200, 'd':400}
-	d = {}
+
 	for i in d1:
 		if i in d2:
 			d2.update({i:(d1[i]+d2[i])})
