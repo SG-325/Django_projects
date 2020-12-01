@@ -1,0 +1,36 @@
+{% extends 'download_app/base.html' %}
+	{% block content %}
+	<div class="todo-list">
+
+    
+  
+  <center><h2>Enter YouTube Video Link Hear</h2></center>
+
+  <form action="/download/" method="POST">
+  	{% csrf_token %}
+  	{%if video_url %}
+    	<input type="search" name="video_url" placeholder="Search" aria-label="Search" value={{video_url}}><br><br>
+    {% else %}
+    	<input type="search" name="video_url" placeholder="Search" aria-label="Search"><br><br>
+    {% endif %}
+    <button class="btn btn-success" type="submit" name="Search">Search</button>
+  </form>
+
+	{% for m in object_list %}
+
+		  <div class="item-row">
+			
+        <strike>{{m}}</strike>
+
+		  </div>
+
+	{% endfor %}
+				
+	</div>
+
+
+{% endblock content%}
+
+
+
+
