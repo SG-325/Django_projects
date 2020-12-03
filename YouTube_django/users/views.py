@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, ProfileUpdate
 from django.contrib import messages
+from download_app.models import NewMP3
+from .models import Profile
 
 
 # Create your views here.
@@ -30,4 +32,36 @@ def user_register(request):
     form = UserRegisterForm()
     return render(request, 'registration/user_register.html', {'form': form})
 
+
+@login_required(login_url="login")
+def user_profile(request):
+    profile = Profile.objects.get(user=request.user)
+    video = NewMP3.objects.all().filter(user=request.user)
+    return render(request, 'registration/user_profile.html', {"profile":profile, "videos":video})
+
+
+def profile_update(request):
+    profile = Profile.objects.get(user=request.user)
+    form = ProfileUpdate(instance=profile)
+
+    if request.method == "POST":
+        form = ProfileUpdate(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            print(request)
+            if request.FILES.get('user_image', None) != None:
+                try:
+                    os.remove(profile.user_image.url)
+                except Exception as e:
+                    print('Exception in removing old profile image: ', e)
+                profile.user_image = request.FILES['user_image']
+                profile.save()
+            return redirect("user_profile")
+                    
+
+        return redirect('user_profile')
+
+    
+
+    return render(request, 'registration/user_profile_update.html', {'form': form})
 

@@ -4,72 +4,123 @@ from django.contrib.auth.models import User
 from .models import NewMP3
 from .forms import MP3Form
 from django.contrib import messages
-from django.views.generic import ListView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
 from pytube import YouTube
+import youtube_dl
 import os
+import requests
+import json
 
 # Create your views here.
-video_url = ''
-class HomeView(LoginRequiredMixin, ListView):
-    model = NewMP3
-
-    def get_query(self):
-        queryset = NewMP3.objects.all().filter(user=self.request.user)
-        return queryset
+videos = []
+video = {}
 
 
-    template_name = "download_app/home.html"
+def home(request):
+    global videos
+    
+    if request.method == 'POST':
+        search_url = 'https://www.googleapis.com/youtube/v3/search'
+        video_url = 'https://www.googleapis.com/youtube/v3/videos'
+
+
+        search_params = {
+            'part':'snippet',
+            'q':request.POST['name'],
+            'key':settings.YOUTUBE_DATA_API_KEY,
+            'type':'video',
+            'maxResults':40,
+        }
+        
+        response = requests.get(search_url, params=search_params)
+        
+        results = response.json()['items']
+
+        video_ids = []
+        for result in results:
+            video_ids.append(result['id']['videoId'])
+
+
+        video_params = {
+            'key':settings.YOUTUBE_DATA_API_KEY,
+            'part':'snippet, contentDetails',
+            'id':','.join(video_ids),
+        }
+
+        response = requests.get(search_url, params=search_params)
+        
+        results = response.json()['items']
+
+        for result in results:
+            video_data = {
+                'title':result['snippet']['title'],
+                'id':result['id'],
+                'url':F"https://www.youtube.com/watch?v={result['id']['videoId']}",
+                'thumbnail':result['snippet']['thumbnails']['high']['url'],
+                'source':F"/static/download_app/songs/{result['snippet']['title']}___{result['id']['videoId']}.mp3"
+            }
+            videos.append(video_data)
+        
+    return render(request,'download_app/index.html', {'videos':videos})
+    
+
+@login_required(login_url = "login")
+def view_video(request, pk):
+    global videos
+    global video
+
+    for v in videos:
+        if v['id']['videoId'] == pk:
+            video = v
+            break
+
+    video_url = video['url']
+    video_info = youtube_dl.YoutubeDL().extract_info(url=video_url)
+    filename = f"{video_info['title']}.mp3"
+
+    options = {
+        'format': 'bestaudio/best',
+        'keepvideo': False,
+        'outtmpl': filename,
+        'postprocessors': [{
+            'key':'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192'
+            }]
+        }
+
+    os.chdir('download_app/static/download_app/songs')
+
+    with youtube_dl.YoutubeDL(options) as ydl:
+        ydl.download([video_url])
+  
+    return render(request,'download_app/video_view.html', {'video':video})
+
 
 
 def download(request):
-    #"https://www.youtube.com/watch?v=AIR5XPWK3Vk"
-    # video_url = str(request.GET.get('url'))
-    # if request.method == "POST":
-        
+    global video
+    video_url = video['url']
+    video_obj = NewMP3.objects.create(user=request.user, name=video['title'], url=video['url'])
+    video_info = youtube_dl.YoutubeDL().extract_info(url=video_url)
+    filename = f"{video_info['title']}.mp3"
 
-    #   video_info = YoutubeDL().extract_info(url=video_url)
+    options = {
+        'format': 'bestaudio/best',
+        'keepvideo': False,
+        'outtmpl': filename,
+        'postprocessors': [{
+            'key':'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192'
+            }]
+        }
 
-    #   filename = f"{video_info['title']}.mp3"
+    os.chdir(os.path.expanduser('~') + '/Downloads')
+    with youtube_dl.YoutubeDL(options) as ydl:
+        ydl.download([video_url])
 
-    #   options = {
-    #       'format': 'bestaudio/best',
-    #       'keepvideo': False,
-    #       'outtmpl': filename,
-    #       'postprocessors': [{
-    #           'key':'FFmpegExtractAudio',
-    #           'preferredcodec': 'mp3',
-    #           'preferredquality': '192'
-    #           }]
-    #   }
+    return render(request,'download_app/video_view.html', {'video':video})
 
-    #   homedir = os.path.expanduser('~') + '/Downloads'
 
-    #   with youtube_dl.YoutubeDL(options) as ydl:
-    #       ydl.download(homedir, [video_url])
-    global video_url
-    if request.method == 'POST':
-        video_url=request.POST['video_url']
-        yt = YouTube(video_url)
-        thumbnail_url = yt.thumbnail_url
-        title = yt.title
-        length = yt.length
-        desc = yt.description
-        view = yt.views
-        rating = yt.rating
-        age_restricted = yt.age_restricted
-        return render(request,'download_app/download_mp3.html',{"title":title,"thumbnail_url":thumbnail_url,"video_url":video_url})
-        
-    else:
-        return render(request,'download_app/home.html')
 
-def downloading(request):
-    global video_url
-    if request.method == 'POST':
-        
-        yt = YouTube(video_url)
-        
-        yt.streams.first().download(os.path.expanduser('~') + '/Downloads')
-
-        return render(request,'download_app/complate.html', {"msg":"downloading completed"})
-    

@@ -1,0 +1,17 @@
+{% extends 'download_app/base.html' %}
+{% block content %}
+	
+	<form action="/view_video/" method="POST">
+		<div>
+			<img src="{{video.thumbnail}}" alt="***">
+		</div>
+		<h3>{{video.title}}</h3>
+		<div>
+			<p>Click<a style="color: green;" onclick="show_loader()" type="button" target="_blank" href="{{video.source}}" download="{{video.title}}.mp3">Play</a>to convert mp3</p>
+		</div>
+		<div>
+			<p>Click <a style="color: green;" type="button" target="_blank" href="{% url 'download' %}" download="{{video.title}}.mp3">dowload</a> mp3 version</p>
+		</div>
+​	</form>
+​
+{% endblock content%}
