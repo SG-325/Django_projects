@@ -126,6 +126,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
 
 YOUTUBE_DATA_API_KEY = 'AIzaSyDz2PvWGb51JDLSdXW5qwTKsdn0rarKqDE'
+#'AIzaSyBOsbHnc1UDEfKrF_YCF774PGC7gVqx8FQ'
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'

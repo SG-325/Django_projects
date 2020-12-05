@@ -6,6 +6,7 @@ from .forms import UserRegisterForm, ProfileUpdate
 from django.contrib import messages
 from download_app.models import NewMP3
 from .models import Profile
+import os
 
 
 # Create your views here.
@@ -22,12 +23,8 @@ def user_register(request):
             if not user is None:
                 login(request,user)
 
-            messages.add_message(request, messages.SUCCESS, "User is created successfully")
-            messages.add_message(request, messages.SUCCESS, "User is login")
-
             return redirect("login")
-        else:
-            messages.add_message(request, messages.SUCCESS, "User is not created successfully")
+      
 
     form = UserRegisterForm()
     return render(request, 'registration/user_register.html', {'form': form})
@@ -36,8 +33,27 @@ def user_register(request):
 @login_required(login_url="login")
 def user_profile(request):
     profile = Profile.objects.get(user=request.user)
-    video = NewMP3.objects.all().filter(user=request.user)
-    return render(request, 'registration/user_profile.html', {"profile":profile, "videos":video})
+    videos = NewMP3.objects.all().filter(user=request.user)
+    
+    list_video = []
+    
+    for video_1 in videos:    
+        count = 0
+        k = True
+
+        for i in list_video:
+            if video_1.name == i.name:
+                k = False
+        if k:
+            list_video.append(video_1)
+
+        for video_2 in videos:
+            if video_1.name == video_2.name:
+                count += 1
+
+        video_1.count = count
+
+    return render(request, 'registration/user_profile.html', {"profile":profile, "videos":list_video})
 
 
 def profile_update(request):
@@ -50,10 +66,10 @@ def profile_update(request):
             form.save()
             print(request)
             if request.FILES.get('user_image', None) != None:
-                try:
-                    os.remove(profile.user_image.url)
-                except Exception as e:
-                    print('Exception in removing old profile image: ', e)
+                # try:
+                #     os.remove(profile.user_image.url)
+                # except Exception as e:
+                #     print('Exception in removing old profile image: ', e)
                 profile.user_image = request.FILES['user_image']
                 profile.save()
             return redirect("user_profile")

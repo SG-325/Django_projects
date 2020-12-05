@@ -5,7 +5,10 @@ Template 2101 Insertion
 http://www.tooplate.com/view/2101-insertion
 
 */
-
+*{
+    margin: 0;
+    padding: 0;
+}
 
 body {
 	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
@@ -13,6 +16,7 @@ body {
     font-weight: 300;
     color: #666666;
     overflow-x: hidden;
+    background: rgba(221,160,221,30%);
 }
 
 a { transition: all 0.3s ease; }
@@ -35,26 +39,41 @@ a:hover, a:focus, a.active {
     color: white;
     max-height: 700px;
     min-height: 400px;
+    padding: 20px;
 }
 
 .tm-fa-big { font-size: 5em; }
-.tm-fa-mb-big { margin-bottom: 3rem; }
+/*.tm-fa-mb-big { margin-bottom: 3rem; }*/
 
 .tm-navbar-container {
     position: absolute;
-    top: 0;
+    top: 20px;
+    right: 5%;
 }
 
-.navbar-nav { margin-right: 0; }
-.nav-link { font-size: 1.4rem; }
 
+.navbar-nav { 
+    margin-right: 0;
+ }
+.nav-link { 
+    font-size: 14px;
+ }
+.nav-item{
+    list-style-type: none;
+}
 .tm-site-description {
     font-size: 1.6rem;
     color: white;
 }
 
-.navbar-expand-sm .navbar-nav .nav-link { padding: 10px 20px; }
-.navbar-nav { flex-direction: row; }
+.navbar-expand-sm .navbar-nav .nav-link {
+    padding: 10px 20px;
+    text-decoration: none;
+ }
+.navbar-nav { 
+    flex-direction: row;
+    display: flex;
+ }
 .tm-site-name { font-size: 4rem; }
 
 .tm-search-form-container {
@@ -74,8 +93,8 @@ a:hover, a:focus, a.active {
 }
 
 .tm-search-box {
-    padding-left: 28px;
-    padding-right: 28px;
+    padding-left: 0px;
+    padding-right: 0px;
     width: 60%;
 }
 
@@ -146,10 +165,111 @@ a:hover, a:focus, a.active {
 }
 
 .tm-albums-container {
-    margin: 80px auto;
-    max-width: 260px;
+    /*margin: 80px auto;*/
+    /*max-width: 260px;*/
+    width: 100%;
+    display: inline-block;
+}
+.videoView .navbar-nav{
+    float: right;
+}
+.todo-list{
+    width: 70%;
+    height: 50%;
+    transform: translate(18%, -38%);
+    background: #b35e6c;
+    padding: 20px;
+    border-radius: 20px;
+}
+.todo-list td{
+    font-size: 24px;
+    color: white;
+}
+.todo-list h1,
+.text-muted{
+    color: white;
+}
+.register-table td{
+    text-align:left; 
+}
+.register-table input{
+    padding: 3px 100px 3px 10px;
+}
+.register-form{
+    text-align: center;
 }
 
+.login-form-link{
+    margin-top:10px;
+}
+.profil-label{
+    font-weight: bold;
+}
+.video-content{
+    width: 50%;
+    display: inline-block;
+}
+.video-name-content{
+    width: 40%;
+    display: inline-block;
+    position: absolute;
+    text-align: center;
+    top: 40%;
+    right: 4%;
+}
+.video-name-content h2{
+    color: white;
+}
+.video-name-content a{
+    margin: auto;
+    background: #b35e6c;
+    text-decoration: none;
+    display: block;
+    border:1px solid rgba(0,0,0,85%);
+    width: 126px;
+    padding: 10px;
+    color: white;
+    margin-top: 10px;
+}
+.my-second-page .tm-site-name{
+    display: none;
+}
+.profil-link a{
+    text-decoration: none;
+    color:#000;
+    line-height: 36px;
+    letter-spacing: 1px;
+}
+.profil-link a:hover{
+    color:#E7A7C0;
+}
+.profil-links-content{
+    border: 1px solid rgba(0,0,0,8%);
+    padding: 20px;
+    border-radius: 10px;
+}
+.btn-success,
+.btn-info{
+    padding:9px 27px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px; 
+    border-style: groove;
+    border: 1px solid rgba(0,0,0,26%);
+    background: #b35e6c;
+    box-shadow: 1px 1px 10px silver;
+}
+.update-form{
+    color: white;
+    text-align: left;
+    width: 50%;
+    margin: auto;
+    padding: 5px;
+    margin-left: 28%;
+}
+.update-form a{
+    color: silver;
+}
 .tm-album-col {
     display: flex;
     justify-content: center;
@@ -258,9 +378,43 @@ figure.effect-sadie:hover p {
     -webkit-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
 }
-
+.imgHoverEfect{
+    position: absolute;
+    top: 0;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,70%);
+    display: none;
+     transition: all 0.3s ease;
+}
+.effect-sadie{
+    position: relative;
+}
+.effect-sadie:hover .imgHoverEfect{
+    display: block;
+    transition: 1s linear;
+} 
+.effect-sadie .img-fluid{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.img-video-title{
+    margin-top: 10%;
+    padding: 30px;
+    height: 70px;
+}
+.imgVideoButtons{
+    display: flex;
+    justify-content: space-around;
+}
+.videosContent{
+    margin:5% 0;
+}
 .tm-tag-line {
-    margin-bottom: 60px;
+    /*margin-bottom: 60px;*/
     position: relative;
     min-height: 285px;
     display: flex;
@@ -291,7 +445,10 @@ figure.effect-sadie:hover p {
 .tm-text-pink-dark { color: #CC6699; }
 .tm-text-brown { color: #CC6666; }
 .tm-bg-gray { background-color: #F2F2F2; }
-.tm-bg-pink { background-color: #de7099; }
+.tm-bg-pink { 
+    background-color: rgba(0,0,0,33%);
+    text-decoration: none;
+ }
 .tm-bg-pink-light { 
     background-color: #f9e3eb;
     padding: 10px 35px; 
@@ -318,8 +475,8 @@ figure.effect-sadie:hover p {
 
 .tm-buy {
     font-weight: 400;
-    width: 100%;
-    padding: 20px 45px;
+    width: 90px;
+    padding: 9px 33px;
 }
 
 .tm-bg-blue.tm-buy:hover,
@@ -330,7 +487,7 @@ figure.effect-sadie:hover p {
 
 .tm-bg-pink.tm-buy:hover,
 .tm-bg-pink.tm-buy:focus {
-    background-color: #d14579;
+    background-color: rgba(0,0,0,60%);
     color: white;
 }
 
@@ -693,18 +850,30 @@ iframe { max-width: 100%; }
 .no-js #loader-wrapper { display: none; }
 
 @media (min-width: 576px) {
-    .tm-albums-container { max-width: none; }
+    /*.tm-albums-container { max-width: none; }*/
     .navbar-expand-sm .navbar-nav .nav-link { padding: 20px 40px; }
     .navbar-nav { margin-right: -40px; }
+    .nav-link { 
+        font-size: 24px;
+    }
 }
 
 @media (min-width: 768px) {
-    .tm-albums-container { max-width: 540px; }
+    /*.tm-albums-container { max-width: 540px; }*/
+    .tm-albums-container {
+        width: 49%;
+    }
+    .img-video-title{
+        height: 160px;
+    }
 }
 
 @media (min-width: 992px){
-    .tm-albums-container { max-width: none; }
+    /*.tm-albums-container { max-width: none; }*/
     figure.effect-sadie h2 { bottom: 20%; }
+     .tm-albums-container {
+        width: 33%;
+    }
 }
 
 @media (min-width: 1200px){
@@ -838,7 +1007,7 @@ iframe { max-width: 100%; }
 @media (max-width: 575px) {
     .container { max-width: 540px; }
     .form-inline .form-control.tm-search-input {
-        width: 100%;
+        width: 80%;
         margin-bottom: 20px;
     }
 
@@ -848,8 +1017,8 @@ iframe { max-width: 100%; }
     }
 
     .tm-albums-container {
-        margin-top: 40px;
-        margin-bottom: 40px;
+        margin-top: 16px;
+        margin-bottom: 0px;
     }
 
     .tm-contact-left,

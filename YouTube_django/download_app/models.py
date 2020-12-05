@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 class NewMP3(models.Model):
     name = models.TextField()
     url = models.TextField( default="http:")
+    count = models.IntegerField(default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
